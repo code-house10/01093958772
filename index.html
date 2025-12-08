@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شركة الريان لنقل العفش | تغليف ونقل أثاث شامل</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a8a; 
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1e40af; 
+        }
+
+        /* Carousel Styles */
+        .carousel-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: cover;
+            background-position: center;
+        }
+        .carousel-item.active {
+            opacity: 1;
+        }
+        .carousel-overlay {
+            background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.3));
+        }
+
+        /* Card Hover Effects */
+        .area-card:hover .area-img {
+            transform: scale(1.1);
+        }
+        .area-card:hover .area-overlay {
+            background-color: rgba(30, 58, 138, 0.9); /* Darker blue tint on hover for text readability */
+        }
+        
+        /* Floating CTA Button */
+        .float-cta {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f97316; /* Orange-500 */
+            color: #FFF;
+            border-radius: 50px;
+            padding: 12px 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+            cursor: pointer;
+            width: max-content;
+            max-width: 90%;
+            border: 2px solid white;
+        }
+        .float-cta:hover {
+            transform: translateX(-50%) scale(1.05);
+            background-color: #ea580c; /* Orange-600 */
+        }
+        .float-cta i {
+            animation: phone-shake 2s infinite;
+        }
+
+        @keyframes phone-shake {
+            0%, 100% { transform: rotate(0deg); }
+            10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); }
+            20%, 40%, 60%, 80% { transform: rotate(10deg); }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 2000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.7); 
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.show {
+            display: flex;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Map Pin Pulse */
+        .map-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 pb-20">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md fixed w-full z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-2">
+                <img src="https://ik.imagekit.io/mkek1asn5/khalaf/logo.webp" alt="شعار شركة الريان" class="h-16 w-auto object-contain">
+                <div class="hidden md:block">
+                    <h1 class="text-xl font-bold text-blue-900 leading-tight">شركة الريان</h1>
+                    <p class="text-xs text-orange-600 font-semibold">لنقل وتغليف الأثاث</p>
+                </div>
+            </a>
+
+            <div class="hidden md:flex items-center gap-6 font-semibold text-gray-700">
+                <a href="#home" class="hover:text-orange-600 transition">الرئيسية</a>
+                <a href="#services" class="hover:text-orange-600 transition">خدماتنا</a>
+                <a href="#areas" class="hover:text-orange-600 transition">مناطق الخدمة</a>
+                <a href="#contact" class="hover:text-orange-600 transition">اتصل بنا</a>
+            </div>
+
+            <button onclick="openModal()" class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-full font-bold transition shadow-lg flex items-center gap-2">
+                <i class="fas fa-phone-alt"></i>
+                <span>اطلب العرض</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Smart Carousel / Hero Section -->
+    <header id="home" class="relative h-[85vh] overflow-hidden">
+        <!-- Carousel Items -->
+        <div id="carousel-container" class="w-full h-full relative">
+            <!-- Slide 1: General/Truck -->
+            <div class="carousel-item active" style="background-image: url('https://ik.imagekit.io/mkek1asn5/khalaf/moving-truck.webp');">
+                <div class="carousel-overlay absolute inset-0 flex items-center justify-center">
+                    <div class="text-center text-white px-4 max-w-4xl" data-aos="fade-up">
+                        <h2 class="text-4xl md:text-6xl font-black mb-4 drop-shadow-lg">أسطول سيارات مجهز</h2>
+                        <p class="text-xl md:text-2xl mb-8 font-light">سيارات مغلقة ومجهزة لنقل عفشك بأمان تام إلى أي مكان في مصر</p>
+                        <button onclick="openModal()" class="bg-blue-900 hover:bg-blue-800 text-white px-8 py-3 rounded-full font-bold text-lg transition">احجز سيارتك الآن</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 2: Winch -->
+            <div class="carousel-item" style="background-image: url('https://ik.imagekit.io/mkek1asn5/khalaf/ونش-رفع-العفش.webp');">
+                <div class="carousel-overlay absolute inset-0 flex items-center justify-center">
+                    <div class="text-center text-white px-4 max-w-4xl">
+                        <h2 class="text-4xl md:text-6xl font-black mb-4 drop-shadow-lg">ونش رفع هيدروليك</h2>
+                        <p class="text-xl md:text-2xl mb-8 font-light">نصل للأدوار الشاهقة بأحدث الأوناش للحفاظ على مقتنياتك من الخدش</p>
+                        <button onclick="openModal()" class="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-full font-bold text-lg transition">اطلب الونش</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Packing -->
+            <div class="carousel-item" style="background-image: url('https://ik.imagekit.io/mkek1asn5/khalaf/تغليف-الاجهزة-المنزلية2.webp');">
+                <div class="carousel-overlay absolute inset-0 flex items-center justify-center">
+                    <div class="text-center text-white px-4 max-w-4xl">
+                        <h2 class="text-4xl md:text-6xl font-black mb-4 drop-shadow-lg">تغليف احترافي شامل</h2>
+                        <p class="text-xl md:text-2xl mb-8 font-light">نستخدم أجود خامات التغليف لحماية الأثاث، الأجهزة، والصيني</p>
+                        <button onclick="openModal()" class="bg-blue-900 hover:bg-blue-800 text-white px-8 py-3 rounded-full font-bold text-lg transition">إتصل بنا</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carousel Indicators -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3 z-10">
+            <button onclick="setSlide(0)" class="w-3 h-3 rounded-full bg-white opacity-50 hover:opacity-100 transition indicator active-indicator"></button>
+            <button onclick="setSlide(1)" class="w-3 h-3 rounded-full bg-white opacity-50 hover:opacity-100 transition indicator"></button>
+            <button onclick="setSlide(2)" class="w-3 h-3 rounded-full bg-white opacity-50 hover:opacity-100 transition indicator"></button>
+        </div>
+    </header>
+
+    <!-- Detailed Services Section -->
+    <section id="services" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h3 class="text-blue-900 font-bold text-lg mb-2">خدماتنا المتميزة</h3>
+                <h2 class="text-4xl font-black text-gray-800">حلول نقل متكاملة لراحة بالك</h2>
+                <div class="w-24 h-1 bg-orange-600 mx-auto mt-4 rounded"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service 1: Packing China -->
+                <div class="bg-gray-50 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 group" data-aos="fade-up" data-aos-delay="100">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://ik.imagekit.io/mkek1asn5/khalaf/تغليف-الاطقم-الصينى.webp" alt="تغليف الصيني" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-0 transition"></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-900 mb-4 text-2xl">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">تغليف الأطقم الصيني</h3>
+                        <p class="text-gray-600 leading-relaxed">عناية فائقة بالمقتنيات القابلة للكسر باستخدام "البابلز" والكرتون المقوى لضمان وصولها سليمة 100%.</p>
+                    </div>
+                </div>
+
+                <!-- Service 2: Furniture Packing -->
+                <div class="bg-gray-50 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 group" data-aos="fade-up" data-aos-delay="200">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://ik.imagekit.io/mkek1asn5/khalaf/تغليف-العفش-باجود-خامات-التغليف.webp" alt="تغليف العفش" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
+                    </div>
+                    <div class="p-6">
+                        <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 mb-4 text-2xl">
+                            <i class="fas fa-couch"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">تغليف الأثاث والموبيليا</h3>
+                        <p class="text-gray-600 leading-relaxed">نستخدم الاسترتش الصناعي والكرتون لحماية الأخشاب من الخدوش والأتربة أثناء النقل.</p>
+                    </div>
+                </div>
+
+                <!-- Service 3: Winch -->
+                <div class="bg-gray-50 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 group" data-aos="fade-up" data-aos-delay="300">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://ik.imagekit.io/mkek1asn5/khalaf/ونش-رفع-العفش2.webp" alt="ونش رفع الاثاث" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500">
+                    </div>
+                    <div class="p-6">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-900 mb-4 text-2xl">
+                            <i class="fas fa-truck-ramp-box"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">خدمة ونش العفش</h3>
+                        <p class="text-gray-600 leading-relaxed">حل مثالي للأدوار العليا والسلالم الضيقة. نضمن رفع وتنزيل آمن تماماً لجميع قطع الأثاث الكبيرة.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Extra Content Block -->
+            <div class="mt-16 bg-blue-900 rounded-2xl p-8 md:p-12 text-white flex flex-col md:flex-row items-center gap-8 shadow-xl" data-aos="zoom-in">
+                <div class="md:w-1/2">
+                    <img src="https://ik.imagekit.io/mkek1asn5/khalaf/صورة_مجمعة.webp" alt="خدمات الريان المتكاملة" class="rounded-lg shadow-lg w-full border-4 border-white/20">
+                </div>
+                <div class="md:w-1/2">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4">لماذا تختار شركة الريان؟</h3>
+                    <ul class="space-y-4 text-lg">
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-orange-500"></i> فريق عمل مدرب ومحترف.</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-orange-500"></i> التزام تام بالمواعيد المتفق عليها.</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-orange-500"></i> ضمان شامل على المنقولات.</li>
+                        <li class="flex items-center gap-3"><i class="fas fa-check-circle text-orange-500"></i> فك وتركيب التكييفات والنجف والستائر.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Areas Section (Smart Grid with Descriptions) -->
+    <section id="areas" class="py-20 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-black text-gray-800 mb-4">نصل إليك أينما كنت</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">نغطي كافة المناطق بخدمات مخصصة تناسب طبيعة كل حي ومدينة</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Area Card Template Loop -->
+                <script>
+                    const areas = [
+                        { name: "6 أكتوبر", desc: "نقل عفش للأحياء، الحي المتميز، وغرب سوميد بأحدث السيارات.", img: "https://ik.imagekit.io/mkek1asn5/khalaf/نقل-عفش-6اكتوبر.webp" },
+                        { name: "التجمع الخامس", desc: "خدمات فك وتركيب لفلل التجمع، النرجس، والياسمين بحرفية.", img: "https://ik.imagekit.io/mkek1asn5/khalaf/نقل-عفش-التجمع-الخامس.webp" },
+                        { name: "الشيخ زايد", desc: "أوناش هيدروليك للوصول لأعلى الطوابق في كمبوندات زايد.", img: "https://ik.imagekit.io/mkek1asn5/khalaf/نقل-عفش-الشيخ-زايد.webp" },
+                        { name: "العبور", desc: "نقل بضائع وأثاث منزلي لجميع أحياء العبور والمنطقة الصناعية.", img: "https://ik.imagekit.io/mkek1asn5/khalaf/نقل-عفش-العبور.webp" },
+                        { name: "المعادي", desc: "فريق متخصص لنقل العفش في شوارع المعادي، دجلة، والسرايات.", img: "https://ik.imagekit.io/mkek1asn5/khalaf/نقل-عفش-المعادى.webp" },
+                        { name: "المقطم", desc: "سيارات قوية مجهزة لصعود هضبة المقطم والأسمرات بأمان.", img: "https://ik.imagekit.io/mkek1asn5/khalaf/نقل-عفش-بالمقطم.webp" },
+                        { name: "جسر السويس", desc: "خدمة سريعة واقتصادية لمنطقة جسر السويس والنزهة الجديدة.", img: "https://ik.imagekit.io/mkek1asn5/khalaf/نقل-عفش-جسر-السويس.webp" },
+                        { name: "حلوان", desc: "نقل عفش شامل لجميع مناطق حلوان وضواحيها بأفضل الأسعار.", img: "https://ik.imagekit.io/mkek1asn5/khalaf/نقل-عفش-حلوان.webp" },
+                        { name: "عين شمس", desc: "أوناش وسيارات تناسب شوارع عين شمس المزدحمة والضيقة.", img: "https://ik.imagekit.io/mkek1asn5/khalaf/نقل-عفش-عين-شمس.webp" },
+                        { name: "مدينتي", desc: "دخول آمن وتصاريح ونش لجميع مجمعات مدينتي السكنية.", img: "https://ik.imagekit.io/mkek1asn5/khalaf/نقل-عفش-مدينتى.webp" },
+                        { name: "مصر الجديدة", desc: "تغليف فاخر للأثاث الكلاسيكي والتحف في مصر الجديدة.", img: "https://ik.imagekit.io/mkek1asn5/khalaf/نقل-عفش-مصر-الجديدة.webp" },
+                        { name: "المنطقة الصناعية", desc: "نقل معدات ومكاتب الشركات للمناطق الصناعية بالعبور.", img: "https://ik.imagekit.io/mkek1asn5/khalaf/نقل-عفش-العبور2.webp" },
+                    ];
+
+                    document.write(areas.map(area => `
+                        <div class="area-card group relative h-64 rounded-xl overflow-hidden cursor-pointer shadow-md" data-aos="fade-up" onclick="openModal()">
+                            <img src="${area.img}" alt="نقل عفش ${area.name}" loading="lazy" class="area-img w-full h-full object-cover transition duration-700 ease-in-out">
+                            <div class="area-overlay absolute inset-0 bg-gradient-to-t from-blue-900 via-black/50 to-transparent opacity-90 transition duration-300 flex flex-col justify-end p-5">
+                                <div class="transform translate-y-4 group-hover:translate-y-0 transition duration-300">
+                                    <h3 class="text-white font-bold text-xl border-r-4 border-orange-500 pr-3 mb-2">${area.name}</h3>
+                                    <p class="text-gray-200 text-sm leading-relaxed opacity-0 group-hover:opacity-100 transition duration-300 delay-100 bg-black/30 p-2 rounded backdrop-blur-sm">
+                                        ${area.desc}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="absolute top-3 left-3 bg-white text-blue-900 rounded-full w-8 h-8 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition duration-300 transform scale-0 group-hover:scale-100">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                        </div>
+                    `).join(''));
+                </script>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location & Map Section -->
+    <section id="contact" class="py-20 bg-white relative">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Contact Info -->
+                <div data-aos="fade-left">
+                    <h2 class="text-3xl font-black text-blue-900 mb-6">تواصل مع شركة الريان</h2>
+                    <p class="text-lg text-gray-600 mb-8">نحن متواجدون في قلب القاهرة لخدمتكم بشكل أسرع. مقرنا الرئيسي في العباسية يسهل علينا الوصول لجميع المناطق.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border-r-4 border-orange-500">
+                            <div class="text-3xl text-blue-900"><i class="fas fa-map-marker-alt"></i></div>
+                            <div>
+                                <h4 class="font-bold text-gray-800">العنوان الرئيسي</h4>
+                                <p class="text-gray-600">ميدان الجيش، العباسية، القاهرة</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border-r-4 border-blue-900">
+                            <div class="text-3xl text-orange-600"><i class="fas fa-phone-volume"></i></div>
+                            <div>
+                                <h4 class="font-bold text-gray-800">أرقام الهاتف</h4>
+                                <p class="text-gray-600 font-en text-lg font-bold" dir="ltr">01004239307</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="openModal()" class="w-full mt-8 bg-blue-900 hover:bg-blue-800 text-white font-bold py-4 rounded-lg shadow-lg transition transform hover:-translate-y-1 text-xl flex items-center justify-center gap-3">
+                        <i class="fas fa-phone-alt animate-pulse"></i>
+                        اتصل الآن للحجز
+                    </button>
+                </div>
+
+                <!-- Google Map with Custom Pin Overlay Logic -->
+                <div class="map-container h-[400px] w-full bg-gray-200 relative group" data-aos="fade-right">
+                    <!-- Embed Google Map focused on Army Square/Abbasiya -->
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3453.0336267868846!2d31.27258331511528!3d30.06456798187498!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14583f7c4600624b%3A0x6b4c10705296839!2sMidan%20Al%20Jaish%2C%20El-Gamaleya%2C%20El%20Gamaliya%2C%20Cairo%20Governorate!5e0!3m2!1sen!2seg!4v1625684521458!5m2!1sen!2seg" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                    
+                    <!-- Custom Animated Pin Card Overlay -->
+                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-16 pointer-events-none">
+                        <div class="relative flex flex-col items-center">
+                            <!-- Tooltip Box -->
+                            <div class="bg-white p-3 rounded-lg shadow-2xl mb-2 text-center w-48 animate-bounce border-2 border-blue-900">
+                                <img src="https://ik.imagekit.io/mkek1asn5/khalaf/logo.webp" class="h-8 mx-auto mb-1">
+                                <h4 class="font-bold text-sm text-blue-900">شركة الريان لنقل العفش</h4>
+                                <p class="text-xs text-gray-500">ميدان الجيش - العباسية</p>
+                            </div>
+                            <!-- Pin Icon -->
+                            <div class="text-5xl text-orange-600 drop-shadow-lg">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <!-- Pulse Effect -->
+                            <div class="absolute bottom-2 w-4 h-4 bg-orange-600 rounded-full animate-ping opacity-75"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-950 text-white py-10 border-t-4 border-orange-600 pb-24 md:pb-10">
+        <div class="container mx-auto px-4 text-center">
+            <img src="https://ik.imagekit.io/mkek1asn5/khalaf/logo.webp" class="h-20 mx-auto mb-4 bg-white rounded-lg p-2">
+            <h2 class="text-2xl font-bold mb-2">شركة الريان لنقل العفش</h2>
+            <p class="text-gray-400 mb-6">الخيار الأمثل لنقل آمن، سريع، واقتصادي في مصر.</p>
+            
+            <div class="flex justify-center gap-4 mb-8">
+                <a href="#" class="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center hover:bg-orange-600 transition"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center hover:bg-orange-600 transition"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="w-10 h-10 rounded-full bg-blue-800 flex items-center justify-center hover:bg-orange-600 transition"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            
+            <div class="border-t border-blue-900 pt-6 text-sm text-gray-500">
+                <p>جميع الحقوق محفوظة &copy; 2023 لشركة الريان لنقل العفش</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- New Floating Call Action -->
+    <div class="float-cta" onclick="openModal()">
+        <i class="fas fa-phone-volume text-2xl"></i>
+        <span class="font-bold text-sm md:text-base">إتصل واعرف تكلفة نقل العفش الأن</span>
+    </div>
+
+    <!-- Call Confirmation Modal -->
+    <div id="callModal" class="modal">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 w-[90%] max-w-md text-center relative border-t-8 border-orange-600">
+            <!-- Close Button -->
+            <button onclick="closeModal()" class="absolute top-4 left-4 text-gray-400 hover:text-gray-600 transition">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            
+            <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-headset text-4xl text-blue-900"></i>
+            </div>
+            
+            <h3 class="text-2xl font-black text-blue-900 mb-2">تأكيد الإتصال</h3>
+            <p class="text-gray-600 mb-6">هل تود التحدث مع خدمة العملاء لمعرفة الأسعار؟</p>
+            
+            <div class="bg-gray-100 rounded-lg p-4 mb-6">
+                <p class="text-sm text-gray-500 mb-1">رقم الهاتف</p>
+                <p class="text-3xl font-black text-gray-800 font-en" dir="ltr">01004239307</p>
+            </div>
+            
+            <div class="flex flex-col gap-3">
+                <!-- Conversion Button for Google Ads -->
+                <a href="tel:01004239307" class="conversion-btn w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-full text-lg shadow-lg flex items-center justify-center gap-2 transition transform active:scale-95">
+                    <i class="fas fa-phone-alt"></i>
+                    <span>إتصال الآن</span>
+                </a>
+                
+                <button onclick="closeModal()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 rounded-full transition">
+                    إلغاء
+                </button>
+            </div>
+            
+            <p class="text-xs text-gray-400 mt-4">متاحون 24 ساعة طوال أيام الأسبوع</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Init Animation on Scroll
+        AOS.init({
+            duration: 800,
+            once: true,
+        });
+
+        // Smart Carousel Logic
+        const slides = document.querySelectorAll('.carousel-item');
+        const indicators = document.querySelectorAll('.indicator');
+        let currentSlide = 0;
+        const slideIntervalTime = 5000; // 5 seconds
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            indicators.forEach(ind => {
+                if(ind) {
+                    ind.classList.remove('opacity-100', 'scale-125');
+                    ind.classList.add('opacity-50');
+                }
+            });
+
+            slides[index].classList.add('active');
+            if(indicators[index]) {
+                indicators[index].classList.remove('opacity-50');
+                indicators[index].classList.add('opacity-100', 'scale-125');
+            }
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function setSlide(index) {
+            currentSlide = index;
+            showSlide(currentSlide);
+        }
+
+        setInterval(nextSlide, slideIntervalTime);
+
+        // Sticky Navbar Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-white/95', 'backdrop-blur-sm');
+                navbar.classList.remove('py-3');
+                navbar.classList.add('py-2');
+            } else {
+                navbar.classList.remove('bg-white/95', 'backdrop-blur-sm');
+                navbar.classList.add('py-3');
+                navbar.classList.remove('py-2');
+            }
+        });
+
+        // Modal Logic
+        const modal = document.getElementById('callModal');
+
+        function openModal() {
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling background
+        }
+
+        function closeModal() {
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto'; // Restore scrolling
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
