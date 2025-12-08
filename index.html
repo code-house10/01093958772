@@ -136,6 +136,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             backdrop-filter: blur(8px);
         }
 
+        /* Shine Animation for Button */
+        @keyframes shimmer {
+            0% { transform: translateX(150%) skewX(-15deg); }
+            100% { transform: translateX(-150%) skewX(-15deg); }
+        }
+        .shine-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background: rgba(255,255,255,0.3);
+            transform: skewX(-15deg);
+            animation: shimmer 2s infinite;
+            filter: blur(5px);
+        }
+
         /* Mobile Menu */
         .mobile-menu-overlay {
             transform: translateX(100%);
@@ -495,31 +512,41 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- Call Modal -->
     <div id="callModal" class="fixed inset-0 z-[2000] hidden items-center justify-center modal-backdrop p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden transform transition-all scale-100 relative">
-            <button onclick="closeModal()" class="absolute top-4 left-4 w-8 h-8 rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition">
+             <button onclick="closeModal()" class="absolute top-4 left-4 w-8 h-8 rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-600 flex items-center justify-center transition z-10">
                 <i class="fas fa-times"></i>
             </button>
             
-            <div class="bg-blue-900 p-6 text-center text-white">
-                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
-                    <i class="fas fa-headset text-3xl"></i>
+            <div class="bg-gradient-to-br from-blue-900 to-blue-800 p-8 text-center text-white relative overflow-hidden">
+                <!-- Background decorative circle -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                
+                <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg animate-bounce">
+                    <i class="fas fa-phone-volume text-4xl text-orange-600"></i>
                 </div>
-                <h3 class="text-xl font-bold">تأكيد الإتصال</h3>
-                <p class="text-blue-200 text-sm mt-1">فريقنا جاهز للرد على استفسارك</p>
+                <h3 class="text-2xl font-bold mb-2">هل أنت جاهز للنقل؟</h3>
+                <p class="text-blue-100 text-sm">اضغط على الزر أدناه للتحدث معنا مباشرة ومعرفة سعر نقل العفش</p>
             </div>
             
             <div class="p-6">
-                <div class="bg-gray-50 rounded-xl p-4 text-center mb-6 border border-gray-100">
-                    <p class="text-xs text-gray-500 mb-1">رقم الهاتف</p>
-                    <p class="text-3xl font-black text-gray-800 font-[arial]" dir="ltr">01004239307</p>
-                </div>
                 
-                <div class="flex flex-col gap-3">
-                    <a href="tel:01004239307" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 rounded-xl text-lg shadow-lg shadow-green-600/30 flex items-center justify-center gap-2 transition transform active:scale-95">
-                        <i class="fas fa-phone-alt"></i>
-                        اتصال مباشر
+                <div class="flex flex-col gap-4">
+                    <!-- Main Conversion Button with Pulse and Shine -->
+                    <a href="tel:01004239307" class="group relative w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 rounded-xl text-xl shadow-xl shadow-green-500/30 flex items-center justify-center gap-3 transition-all transform hover:-translate-y-1 overflow-hidden">
+                        <!-- Shine effect element -->
+                        <div class="shine-effect"></div>
+                        
+                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center animate-pulse">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="flex flex-col items-center leading-none gap-1">
+                            <span>اتصل الآن مجاناً</span>
+                            <span class="text-sm font-normal opacity-90 font-[arial]" dir="ltr">01004239307</span>
+                        </div>
                     </a>
-                    <button onclick="closeModal()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-3.5 rounded-xl transition">
-                        إلغاء
+              
+                    
+                    <button onclick="closeModal()" class="w-full text-gray-400 text-sm hover:text-gray-600 transition">
+                        لا، شكراً. سأتصل لاحقاً
                     </button>
                 </div>
             </div>
